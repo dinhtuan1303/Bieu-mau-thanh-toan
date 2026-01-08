@@ -80,7 +80,7 @@ def mau_giay_de_nghi_thanh_toan():
     <tr>
         <td></td>
         <td style="text-align: right; padding-right: 20px; font-style: italic;">
-            {DIA_DANH_MAC_DINH}, ngày {pd.Timestamp.now().day} tháng {pd.Timestamp.now().month} năm {pd.Timestamp.now().year}
+            <b>Gia Lai</b>, ngày {pd.Timestamp.now().day} tháng {pd.Timestamp.now().month} năm {pd.Timestamp.now().year}
         </td>
     </tr>
 </table>
@@ -128,4 +128,5 @@ chon = st.sidebar.selectbox("Chọn mẫu:", ["Giấy đề nghị thanh toán"]
 
 if chon == "Giấy đề nghị thanh toán":
     mau_giay_de_nghi_thanh_toan()
+
 
