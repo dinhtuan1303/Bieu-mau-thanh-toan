@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 
 # ==========================================
-# 1. CẤU HÌNH THÔNG TIN MẶC ĐỊNH (Sửa tại đây)
+# 1. CẤU HÌNH THÔNG TIN MẶC ĐỊNH
 # ==========================================
 TEN_DON_VI_MAC_DINH = "TRƯỜNG ĐẠI HỌC QUY NHƠN"
 MA_DON_VI_MAC_DINH = "1055595"
@@ -92,10 +92,10 @@ def mau_giay_de_nghi_thanh_toan():
 
 <p style="padding-left: 50px;"><b><i>Kính gửi:</i> &nbsp;&nbsp;&nbsp; - Hiệu trưởng Trường Đại học Quy Nhơn</b></p>
 
-<p>Họ và tên người đề nghị thanh toán: ...................{ho_ten}....................................................................</p>
-<p>Đơn vị: ...................{dv_cong_tac}...................................................................................................................</p>
-<p>Chức vụ: ...................{chuc_vu}.....................................................................................................................</p>
-<p>Số tài khoản: ...................{stk}................ tại ngân hàng: .................{ngan_hang}.................</p>
+<p>Họ và tên người đề nghị thanh toán: {ho_ten} </p>
+<p>Đơn vị: {dv_cong_tac} </p>
+<p>Chức vụ: {chuc_vu} </p>
+<p>Số tài khoản: {stk} tại ngân hàng: {ngan_hang} </p>
 <p>Nội dung thanh toán: {noi_dung}</p>
 <p>Đề nghị thanh toán số tiền: .................{so_tien:,.0f} VNĐ.........................................................................</p>
 <p>Bằng chữ: ...................{bang_chu}..........................................................................................................</p>
@@ -131,3 +131,4 @@ chon = st.sidebar.selectbox("Chọn mẫu:", ["Giấy đề nghị thanh toán"]
 
 if chon == "Giấy đề nghị thanh toán":
     mau_giay_de_nghi_thanh_toan()
+
