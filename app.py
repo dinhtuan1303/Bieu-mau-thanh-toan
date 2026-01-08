@@ -6,10 +6,9 @@ import pandas as pd
 # ==========================================
 st.set_page_config(page_title="Hệ thống in Giấy đề nghị thanh toán", layout="wide")
 
-# CSS để định dạng bản in chuyên nghiệp và ẩn các thành phần thừa
+# CSS để định dạng bản in chuyên nghiệp
 st.markdown("""
     <style>
-    /* Hiển thị trên Web */
     .vung-in-chuan {
         background: white; color: black; padding: 30px;
         border: 1px solid #ddd; font-family: "Times New Roman", Times, serif;
@@ -18,7 +17,6 @@ st.markdown("""
     .header-table { width: 100%; border: none !important; margin-bottom: 10px; }
     .header-table td { border: none !important; text-align: center; vertical-align: top; padding: 0; color: black; }
     
-    /* Chế độ in (Ctrl + P) */
     @media print {
         header, footer, .stSidebar, .stButton, .stForm, .stAlert,
         [data-testid="stHeader"], [data-testid="stToolbar"],
@@ -61,7 +59,7 @@ def mau_giay_de_nghi_thanh_toan():
     if submitted:
         st.success("Đã tạo mẫu thành công! Nhấn Ctrl + P để in.")
         
-        # LƯU Ý: Không thụt đầu dòng các thẻ HTML để tránh lỗi hiển thị code thô
+        # Căn lề sát trái cho chuỗi f-string để tránh lỗi thụt lề và đóng nháy kép ở cuối
         html_output = f"""<div class="vung-in-chuan">
 <table class="header-table">
     <tr>
@@ -71,37 +69,4 @@ def mau_giay_de_nghi_thanh_toan():
         </td>
         <td style="width: 55%;">
             <b>CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM</b><br>
-            <b>Độc lập - Tự do - Hạnh phúc</b><br>
-            <span style="text-decoration: overline;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-        </td>
-    </tr>
-    <tr>
-        <td></td>
-        <td style="text-align: right; padding-right: 20px; font-style: italic;">
-            {dia_danh}, ngày {pd.Timestamp.now().day} tháng {pd.Timestamp.now().month} năm {pd.Timestamp.now().year}
-        </td>
-    </tr>
-</table>
-
-<h2 style="text-align: center; margin-top: 10px; margin-bottom: 20px;">GIẤY ĐỀ NGHỊ THANH TOÁN</h2>
-
-<p style="padding-left: 50px;"><b><i>Kính gửi:</i> &nbsp;&nbsp;&nbsp; - Hiệu trưởng Trường Đại học Quy Nhơn</b></p>
-
-<p>Họ và tên người đề nghị thanh toán: ...................{ho_ten}....................................................................</p>
-<p>Đơn vị: ...................{dv_cong_tac}...................................................................................................................</p>
-<p>Chức vụ: ...................{chuc_vu}.....................................................................................................................</p>
-<p>Số tài khoản: ...................{stk}................ tại ngân hàng: .................{ngan_hang}.................</p>
-<p>Nội dung thanh toán: {noi_dung}</p>
-<p>Đề nghị thanh toán số tiền: .................{so_tien:,.0f} VNĐ.........................................................................</p>
-<p>Bằng chữ: ...................{bang_chu}..........................................................................................................</p>
-<p><i>(Kèm theo ...................{kem_theo}.................. chứng từ gốc)</i></p>
-
-<table class="header-table" style="margin-top: 20px;">
-    <tr>
-        <td><b>Người đề nghị</b><br><i>(Ký, họ tên)</i><br><br><br><br><b>{ho_ten}</b></td>
-        <td><b>Trưởng đơn vị</b><br><i>(Ký, họ tên)</i></td>
-    </tr>
-</table>
-
-<div style="margin-top: 40px; border-top: 1px dashed black; padding-top: 10px;">
-    <p style="text-align:
+            <b>Độc lập - Tự do
