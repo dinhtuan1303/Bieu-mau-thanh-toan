@@ -2,12 +2,8 @@ import streamlit as st
 import pandas as pd
 
 # ==========================================
-# 1. CẤU HÌNH THÔNG TIN MẶC ĐỊNH
+# 1. CẤU HÌNH THÔNG TIN
 # ==========================================
-TEN_DON_VI_MAC_DINH = "TRƯỜNG ĐẠI HỌC QUY NHƠN"
-MA_DON_VI_MAC_DINH = "1055595"
-DIA_DANH_MAC_DINH = "Gia Lai"
-
 st.set_page_config(page_title="Hệ thống in Giấy đề nghị thanh toán", layout="wide")
 
 st.markdown("""
@@ -71,8 +67,9 @@ def mau_giay_de_nghi_thanh_toan():
 <table class="header-table">
     <tr>
         <td style="width: 45%; text-align: left;">
-            <b>{TEN_DON_VI_MAC_DINH.upper()}</b><br>
-            Mã ĐVCQHVNS: {MA_DON_VI_MAC_DINH}
+            <b>TRƯỜNG ĐẠI HỌC QUY NHƠN</b><br>
+            <b>Mã ĐVCQHVNS: 1055595</b><br>
+            <span style="text-decoration: overline;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
         </td>
         <td style="width: 55%;">
             <b>CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM</b><br>
@@ -131,3 +128,4 @@ chon = st.sidebar.selectbox("Chọn mẫu:", ["Giấy đề nghị thanh toán"]
 
 if chon == "Giấy đề nghị thanh toán":
     mau_giay_de_nghi_thanh_toan()
+
