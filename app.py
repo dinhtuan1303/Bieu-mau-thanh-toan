@@ -13,54 +13,35 @@ def load_dinh_muc():
         df = pd.read_excel("dinh_muc.xlsx")
         return pd.Series(df.Gia_Tri.values, index=df.Ten_Muc).to_dict()
     except:
-        return {"Tiền ăn": 150000, "Phòng nghỉ": 350000}
+        return {"Tiền ăn": 150000, "Phòng nghỉ": 350000, "Phụ cấp lưu trú": 300000}
 
 DINH_MUC = load_dinh_muc()
 
-# CSS NÂNG CAO ĐỂ KHÓA CHẾ ĐỘ IN (Đã sửa lỗi ẩn tiêu đề và dòng thừa)
+# CSS ĐỂ XỬ LÝ GIAO DIỆN IN (ẨN CÁC PHẦN THỪA)
 st.markdown("""
     <style>
-    /* CSS HIỂN THỊ TRÊN WEB */
     .vung-in-chuan {
         background: white; color: black; padding: 40px;
         border: 1px solid #eee; font-family: "Times New Roman", serif;
-        line-height: 1.5; margin-top: 20px;
+        line-height: 1.5;
     }
     table { width: 100%; border-collapse: collapse; margin-top: 15px; }
     th, td { border: 1px solid black; padding: 8px; text-align: center; color: black; }
-
-    /* CSS CHO CHẾ ĐỘ IN (CTRL + P) */
+    
     @media print {
-        /* 1. Ẩn toàn bộ các phần tử mặc định của Streamlit và các ô nhập liệu */
         header, footer, .stSidebar, .stButton, .stForm, .stAlert,
-        [data-testid="stHeader"], [data-testid="stDecoration"], [data-testid="stToolbar"],
+        [data-testid="stHeader"], [data-testid="stToolbar"],
         div[data-testid="stVerticalBlock"] > div:not(:has(.vung-in-chuan)) {
             display: none !important;
-            height: 0; padding: 0; margin: 0;
         }
-
-        /* 2. Ép buộc vùng in hiển thị đúng định dạng */
-        .vung-in-chuan {
-            display: block !important;
-            position: absolute; top: 0; left: 0; width: 100%;
-            border: none !important; padding: 0 !important; margin: 0 !important;
-        }
-
-        /* 3. Đảm bảo tiêu đề in luôn hiện */
-        .title-in {
-            display: block !important;
-            text-align: center; text-transform: uppercase;
-            font-size: 20pt; font-weight: bold; margin-bottom: 20px;
-        }
-
-        /* 4. Xóa lề mặc định của Streamlit */
-        .main .block-container { padding: 0 !important; margin: 0 !important; }
+        .vung-in-chuan { display: block !important; width: 100%; }
+        .main .block-container { padding: 0 !important; }
     }
     </style>
     """, unsafe_allow_html=True)
 
 # ==========================================
-# 2. CÁC HÀM MẪU GIẤY (Đã sửa lỗi hiển thị HTML)
+# 2. CÁC HÀM MẪU GIẤY
 # ==========================================
 
 def mau_giay_de_nghi_thanh_toan():
@@ -73,21 +54,32 @@ def mau_giay_de_nghi_thanh_toan():
 
     if submitted:
         st.success("Đã tạo mẫu thành công! Nhấn Ctrl + P để in.")
-        # CHÚ Ý: Không thụt đầu dòng các thẻ HTML để tránh lỗi hiển thị code nguyên bản
-        html_output = f"""<div class="vung-in-chuan">
-<h2 class="title-in">GIẤY ĐỀ NGHỊ THANH TOÁN</h2>
-<br>
-<p><b>Kính gửi:</b> Ban Lãnh đạo đơn vị</p>
-<p>Họ và tên người đề nghị: {ho_ten}</p>
-<p>Nội dung thanh toán: {noi_dung}</p>
-<p>Số tiền đề nghị: <b>{so_tien:,.0f} VNĐ</b></p>
-<p><i>(Bằng chữ: ....................................................................)</i></p>
-<br><br>
-<div style="display: flex; justify-content: space-around;">
-<div style="text-align: center;"><b>Người đề nghị</b><br><br><br><br><b>{ho_ten}</b></div>
-<div style="text-align: center;"><b>Kế toán trưởng</b><br><br><br><br>...........................</div>
-</div>
-</div>"""
+        # Dùng chuỗi f-string và hiển thị bằng st.markdown với unsafe_allow_html=True
+        html_output = f"""
+        <div class="vung-in-chuan">
+            <h2 style="text-align: center; text-transform: uppercase;">GIẤY ĐỀ NGHỊ THANH TOÁN</h2>
+            <p style="text-align: center;"><i>Ngày {pd.Timestamp.now().day} tháng {pd.Timestamp.now().month} năm {pd.Timestamp.now().year}</i></p>
+            <br>
+            <p><b>Kính gửi:</b> Ban Lãnh đạo đơn vị</p>
+            <p>Họ và tên người đề nghị: {ho_ten}</p>
+            <p>Nội dung thanh toán: {noi_dung}</p>
+            <p>Số tiền đề nghị: <b>{so_tien:,.0f} VNĐ</b></p>
+            <p><i>(Bằng chữ: ....................................................................)</i></p>
+            <br><br>
+            <div style="display: flex; justify-content: space-around;">
+                <div style="text-align: center;"><b>Người đề nghị</b><br><br><br><br><b>{ho_ten}</b></div>
+                <div style="text-align: center;"><b>Kế toán trưởng</b><br><br><br><br>...........................</div>
+            </div>
+        </div>
+        """
         st.markdown(html_output, unsafe_allow_html=True)
 
-def mau_bang_ke_cong_tac_phi
+def mau_bang_ke_cong_tac_phi(): # Đã sửa: Thêm dấu ngoặc đơn ()
+    st.header("Thiết lập: Bảng kê công tác phí")
+    if 'rows_ctp' not in st.session_state:
+        st.session_state.rows_ctp = [{"loai": list(DINH_MUC.keys())[0], "sl": 1}]
+
+    for i, row in enumerate(st.session_state.rows_ctp):
+        c1, c2, c3 = st.columns([3, 1, 1])
+        with c1: st.session_state.rows_ctp[i]['loai'] = st.selectbox(f"Khoản chi {i+1}", list(DINH_MUC.keys()), key=f"l_{i}")
+        with c2: st.session_state.rows_ctp[i]['sl'] = st.number_input(f"SL {i+1}", min_value=
