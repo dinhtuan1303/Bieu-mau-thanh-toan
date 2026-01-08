@@ -1,0 +1,26 @@
+import streamlit as st
+import utilities
+import data_manager
+
+def hien_thi():
+    st.subheader("📝 GIẤY ĐỀ NGHỊ THANH TOÁN")
+    ds_phong = data_manager.load_phong_ban()
+    
+    with st.form("form_thanh_toan"):
+        ho_ten = st.text_input("Họ tên người đề nghị")
+        don_vi = st.selectbox("Đơn vị", ds_phong)
+        so_tien = st.number_input("Số tiền", min_value=0, step=10000)
+        submitted = st.form_submit_button("Tạo bản in")
+        
+        if submitted:
+            st.info("Nhấn Ctrl + P để in ấn")
+            html = f"""
+            <div style="background:white; color:black; padding:30px; font-family:'Times New Roman'">
+                <h2 style="text-align:center">GIẤY ĐỀ NGHỊ THANH TOÁN</h2>
+                <p>Kính gửi: Hiệu trưởng Trường Đại học Quy Nhơn</p>
+                <p>Họ tên: <b>{ho_ten}</b> - Đơn vị: <b>{don_vi}</b></p>
+                <p>Số tiền: <b>{utilities.format_vnd(so_tien)} VNĐ</b></p>
+                <p>Bằng chữ: <i>{utilities.chieu_so_thanh_chu(so_tien)}</i></p>
+            </div>
+            """
+            st.markdown(html, unsafe_allow_html=True)
