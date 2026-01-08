@@ -1,6 +1,6 @@
 import streamlit as st
 # Sửa lỗi 1: Thêm dấu phẩy giữa các module
-from modules import mauso3_tamung, mauso4_1_thanhtoan
+from modules import mauso3_tamung, mauso41_thanhtoan
 
 st.set_page_config(page_title="Hệ thống QNU", layout="wide")
 
@@ -16,4 +16,5 @@ menu = st.sidebar.selectbox("Chọn loại mẫu:", [option_1, option_2])
 if menu == option_1:
     mauso3_tamung.hien_thi()
 elif menu == option_2:
-    mauso4_1_thanhtoan.hien_thi()
+    mauso41_thanhtoan.hien_thi()
+
