@@ -1,107 +1,92 @@
 import streamlit as st
+import pandas as pd
 
-# Cấu hình trang (Sửa lỗi page_icon)
-st.set_page_config(page_title="Hệ thống in phiếu", page_icon="📝", layout="centered")
+# 1. Đọc định mức từ file Excel
+@st.cache_data
+def load_dinh_muc():
+    try:
+        df = pd.read_excel("dinh_muc.xlsx")
+        return pd.Series(df.Gia_Tri.values, index=df.Ten_Muc).to_dict()
+    except:
+        return {"Tiền ăn": 150000, "Phòng nghỉ": 350000}
 
-# --- PHẦN 1: CSS ĐỂ ẨN TIÊU ĐỀ VÀ THÀNH PHẦN THỪA KHI IN ---
-st.markdown("""
-    <style>
-    /* CSS dành riêng cho chế độ IN (Ctrl + P) */
-    @media print {
-        /* Ẩn tiêu đề lớn (h1), form nhập liệu, các nút bấm, dòng thông báo và thanh công cụ Streamlit */
-        h1, [data-testid="stForm"], .stButton, .stSuccess, .stAlert, 
-        header, footer, [data-testid="stHeader"], [data-testid="stDecoration"] {
-            display: none !important;
-            height: 0;
-            margin: 0;
-            padding: 0;
-        }
-        
-        /* Loại bỏ khoảng trắng dư thừa do Streamlit tạo ra */
-        .main .block-container {
-            padding-top: 0 !important;
-            margin-top: 0 !important;
-        }
-        
-        /* Hiển thị vùng in toàn màn hình */
-        .vung-phiếu-in {
-            border: none !important;
-            width: 100% !important;
-            margin: 0 !important;
-            padding: 0 !important;
-        }
-    }
+DINH_MUC = load_dinh_muc()
 
-    /* Giao diện hiển thị trên màn hình máy tính */
-    .vung-phiếu-in {
-        background-color: white;
-        color: black;
-        padding: 30px;
-        border: 1px solid #ddd;
-        font-family: "Times New Roman", Times, serif;
-    }
-    </style>
-    """, unsafe_allow_html=True)
+st.title("📑 Bảng Kê Thanh Toán Đa Năng")
 
-# Tiêu đề này chỉ hiện trên Web, sẽ bị ẩn khi in nhờ CSS h1 ở trên
-st.title("🖨️ Tạo Phiếu Thanh Toán Nhanh")
+# 2. Tạo trạng thái lưu trữ danh sách các dòng nhập liệu
+if 'rows' not in st.session_state:
+    st.session_state.rows = [{"noi_dung": "Tiền ăn", "so_luong": 1}]
 
-# --- PHẦN 2: FORM NHẬP LIỆU ---
-with st.form("input_form"):
-    col1, col2 = st.columns(2)
+# 3. Giao diện thêm/bớt dòng
+st.subheader("Chi tiết các khoản chi")
+for i, row in enumerate(st.session_state.rows):
+    col1, col2, col3 = st.columns([3, 2, 1])
     with col1:
-        ho_ten = st.text_input("Họ và tên người đề nghị")
-        bo_phan = st.selectbox("Bộ phận", ["Hành chính", "Kế toán", "Kỹ thuật", "Tổ chức"])
+        st.session_state.rows[i]['noi_dung'] = st.selectbox(
+            f"Loại chi phí {i+1}", 
+            list(DINH_MUC.keys()), 
+            key=f"select_{i}"
+        )
     with col2:
-        ngay = st.date_input("Ngày lập phiếu")
-        so_tien = st.number_input("Số tiền (VNĐ)", min_value=0, step=1000)
-    
-    noi_dung = st.text_area("Nội dung thanh toán")
-    chốt_phieu = st.form_submit_button("XUẤT PHIẾU ĐỂ IN")
+        st.session_state.rows[i]['so_luong'] = st.number_input(
+            f"Số lượng/Ngày {i+1}", 
+            min_value=1, 
+            step=1, 
+            key=f"num_{i}"
+        )
+    with col3:
+        # Nút xóa dòng
+        if st.button("Xóa", key=f"del_{i}"):
+            st.session_state.rows.pop(i)
+            st.rerun()
 
-# --- PHẦN 3: HIỂN THỊ PHIẾU ---
-if chốt_phieu:
-    # Thông báo này cũng sẽ tự ẩn khi in
+if st.button("➕ Thêm dòng chi phí"):
+    st.session_state.rows.append({"noi_dung": list(DINH_MUC.keys())[0], "so_luong": 1})
+    st.rerun()
+
+# 4. Tính toán tổng tiền
+st.divider()
+tong_cong = 0
+bang_du_lieu_html = ""
+
+for i, row in enumerate(st.session_state.rows):
+    don_gia = DINH_MUC.get(row['noi_dung'], 0)
+    thanh_tien = row['so_luong'] * don_gia
+    tong_cong += thanh_tien
+    # Tạo các dòng cho bảng HTML in ấn
+    bang_du_lieu_html += f"""
+    <tr>
+        <td>{i+1}</td>
+        <td>{row['noi_dung']}</td>
+        <td>{row['so_luong']}</td>
+        <td>{don_gia:,.0f}</td>
+        <td>{thanh_tien:,.0f}</td>
+    </tr>
+    """
+
+st.metric("Tổng cộng thanh toán", f"{tong_cong:,.0f} VNĐ")
+
+# 5. Xuất bản in (Kết hợp HTML bảng)
+if st.button("🖨️ Xuất bản in"):
     st.success("Đã tạo mẫu! Nhấn Ctrl + P để in.")
-    
-    # Tạo chuỗi HTML (Lưu ý: Không dùng thụt đầu dòng (tabs) quá nhiều bên trong f-string để tránh lỗi markdown)
     html_layout = f"""
-<div class="vung-phiếu-in">
-    <table style="width: 100%; border: none;">
-        <tr>
-            <td style="text-align: center; width: 45%; vertical-align: top;">
-                <b style="text-transform: uppercase;">ĐƠN VỊ CỦA BẠN</b><br>
-                ----------
-            </td>
-            <td style="text-align: center; vertical-align: top;">
-                <b>CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM</b><br>
-                <b>Độc lập - Tự do - Hạnh phúc</b><br>
-                ----------
-            </td>
-        </tr>
-    </table>
-    <br><br>
-    <h2 style="text-align: center; margin: 0;">GIẤY ĐỀ NGHỊ THANH TOÁN</h2>
-    <p style="text-align: center; margin-top: 5px;"><i>Ngày {ngay.day} tháng {ngay.month} năm {ngay.year}</i></p>
-    <br>
-    <p style="padding-left: 30px;"><b>Kính gửi:</b> Ban Lãnh đạo đơn vị</p>
-    <p>Họ và tên người đề nghị: {ho_ten}</p>
-    <p>Bộ phận: {bo_phan}</p>
-    <p>Nội dung thanh toán: {noi_dung}</p>
-    <p>Số tiền bằng số: <b>{so_tien:,.0f} VNĐ</b></p>
-    <p><i>Số tiền bằng chữ: ................................................................................</i></p>
-    <br>
-    <div style="display: flex; justify-content: space-around; margin-top: 20px;">
-        <div style="text-align: center;">
-            <b>Người lập phiếu</b><br>(Ký, họ tên)
-            <br><br><br><br><b>{ho_ten}</b>
-        </div>
-        <div style="text-align: center;">
-            <b>Kế toán trưởng</b><br>(Ký, họ tên)
-            <br><br><br><br>...........................
-        </div>
+    <div style="font-family: 'Times New Roman'; color: black; background: white; padding: 30px;">
+        <h2 style="text-align: center;">BẢNG KÊ CHI TIẾT THANH TOÁN</h2>
+        <table style="width: 100%; border-collapse: collapse; border: 1px solid black;">
+            <tr style="background-color: #f2f2f2;">
+                <th style="border: 1px solid black;">STT</th>
+                <th style="border: 1px solid black;">Nội dung chi</th>
+                <th style="border: 1px solid black;">Số lượng</th>
+                <th style="border: 1px solid black;">Đơn giá</th>
+                <th style="border: 1px solid black;">Thành tiền</th>
+            </tr>
+            {bang_du_lieu_html}
+            <tr>
+                <td colspan="4" style="border: 1px solid black; text-align: right;"><b>TỔNG CỘNG:</b></td>
+                <td style="border: 1px solid black;"><b>{tong_cong:,.0f}</b></td>
+            </tr>
+        </table>
     </div>
-</div>
-"""
-    # Dùng st.components.v1.html hoặc st.markdown với unsafe_allow_html=True
+    """
     st.markdown(html_layout, unsafe_allow_html=True)
