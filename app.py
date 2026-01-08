@@ -97,5 +97,30 @@ def mau_giay_de_nghi_thanh_toan():
 <table class="header-table" style="margin-top: 20px;">
     <tr>
         <td><b>Người đề nghị</b><br><i>(Ký, họ tên)</i><br><br><br><br><b>{ho_ten}</b></td>
-        <td><b>Trưởng đơn vị</b><br><i>(Ký, họ tên)</i><br><br><br><br><b>{ho_ten}</b></td>
+        <td><b>Trưởng đơn vị</b><br><i>(Ký, họ tên)</i></td>
+    </tr>
+</table>
 
+<div style="margin-top: 40px; border-top: 1px dashed black; padding-top: 10px;">
+    <p style="text-align: center; font-weight: bold;">Phần kiểm soát phê duyệt thanh toán của Trường</p>
+    <p>Bằng số: .......................................................................................................................................................</p>
+    <p>Bằng chữ: .....................................................................................................................................................</p>
+    <table class="header-table" style="margin-top: 10px; font-size: 11pt;">
+        <tr>
+            <td><b>Kế toán thanh toán</b><br><i>(Ký, họ tên)</i></td>
+            <td><b>Kế toán Trưởng</b><br><i>(Ký, họ tên)</i></td>
+            <td><b>Duyệt của Hiệu trưởng</b><br><i>(Ký, họ tên)</i></td>
+        </tr>
+    </table>
+</div>
+</div>"""
+        st.markdown(html_output, unsafe_allow_html=True)
+
+# ==========================================
+# 3. ĐIỀU KHIỂN
+# ==========================================
+st.sidebar.title("DANH MỤC")
+chon = st.sidebar.selectbox("Chọn mẫu:", ["Giấy đề nghị thanh toán"])
+
+if chon == "Giấy đề nghị thanh toán":
+    mau_giay_de_nghi_thanh_toan()
