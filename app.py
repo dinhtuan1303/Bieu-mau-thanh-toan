@@ -1,34 +1,35 @@
 import streamlit as st
 
-# 1. Cấu hình trang
+# 1. Cấu hình tiêu đề trang
 st.set_page_config(page_title="Hệ thống in phiếu", page_icon="📝")
 
-# 2. CSS để xử lý giao diện hiển thị và GIAO DIỆN IN
+# 2. CSS Đặc biệt để ẩn mọi thứ KHI IN
 st.markdown("""
     <style>
-    /* CSS dành riêng cho chế độ IN (Ctrl + P) */
+    /* Ẩn các thành phần web khi nhấn Ctrl + P */
     @media print {
-        /* Ẩn hoàn toàn tiêu đề web, nút bấm, thông báo xanh và các thành phần thừa */
-        h1, .stButton, .stSuccess, [data-testid="stHeader"], footer, [data-testid="stForm"], .stAlert {
+        /* Ẩn tiêu đề lớn, nút bấm, dòng thông báo xanh, menu và header của Streamlit */
+        h1, .stButton, .stSuccess, [data-testid="stHeader"], footer, [data-testid="stForm"], .stAlert, [data-testid="stDecoration"] {
             display: none !important;
         }
         
-        /* Đẩy nội dung phiếu lên sát mép trên cùng của giấy */
+        /* Đẩy phiếu lên sát mép giấy, loại bỏ khoảng trắng dư thừa */
         .main .block-container {
             padding-top: 0 !important;
             padding-bottom: 0 !important;
         }
 
-        /* Xóa bỏ khung viền xám xung quanh phiếu khi in */
-        .mau-in-thuc-te {
+        /* Loại bỏ khung viền bao quanh phiếu khi in */
+        .khung-phieu-in {
             border: none !important;
             padding: 0 !important;
             margin: 0 !important;
+            box-shadow: none !important;
         }
     }
 
-    /* Giao diện hiển thị trên màn hình máy tính để dễ nhìn */
-    .mau-in-thuc-te {
+    /* Giao diện hiển thị trên web cho dễ nhìn */
+    .khung-phieu-in {
         background-color: white;
         color: black;
         padding: 40px;
@@ -42,7 +43,7 @@ st.markdown("""
 st.title("🖨️ Tạo Phiếu Thanh Toán Nhanh")
 
 # 3. Form nhập liệu
-with st.form("input_form"):
+with st.form("form_thanh_toan"):
     col1, col2 = st.columns(2)
     with col1:
         ho_ten = st.text_input("Họ và tên người đề nghị")
@@ -56,11 +57,12 @@ with st.form("input_form"):
 
 # 4. Hiển thị phiếu khi bấm nút
 if chốt_phieu:
+    # Thông báo này chỉ hiện trên web, không hiện khi in
     st.success("Đã tạo mẫu thành công! Nhấn Ctrl + P để in phiếu.")
     
-    # Định dạng nội dung tờ phiếu bằng HTML
-    html_layout = f"""
-    <div class="mau-in-thuc-te">
+    # Nội dung phiếu bằng HTML
+    html_phieu = f"""
+    <div class="khung-phieu-in">
         <table style="width: 100%; border: none;">
             <tr>
                 <td style="text-align: center; width: 45%; vertical-align: top;">
@@ -105,5 +107,5 @@ if chốt_phieu:
     </div>
     """
     
-    # Dùng unsafe_allow_html=True để hiển thị đúng định dạng thay vì hiện code
-    st.markdown(html_layout, unsafe_allow_html=True)
+    # QUAN TRỌNG: unsafe_allow_html=True giúp thực thi mã HTML thay vì hiện thẻ code
+    st.markdown(html_phieu, unsafe_allow_html=True)
