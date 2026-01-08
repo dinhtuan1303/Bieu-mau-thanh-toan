@@ -1,38 +1,36 @@
 import streamlit as st
 
-# 1. Cấu hình trang (Sửa lỗi 'icon' thành 'page_icon')
+# 1. Cấu hình tiêu đề trang web
 st.set_page_config(page_title="Hệ thống in phiếu", page_icon="📝")
 
-# 2. CSS để ẩn các thành phần thừa KHI IN
+# 2. CSS Đặc biệt: Ẩn mọi thứ của trang web khi nhấn Ctrl+P
 st.markdown("""
     <style>
-    /* Ẩn các thành phần giao diện web khi in */
     @media print {
-        /* Ẩn tiêu đề lớn, nút bấm, thông báo xanh, và header của Streamlit */
+        /* Ẩn tiêu đề lớn, các nút bấm, dòng thông báo xanh và menu của Streamlit */
         h1, .stButton, .stSuccess, [data-testid="stHeader"], footer, [data-testid="stForm"] {
             display: none !important;
         }
         
-        /* Loại bỏ khoảng trắng dư thừa ở đầu trang */
+        /* Đẩy nội dung phiếu lên sát đầu trang giấy */
         .main .block-container {
             padding-top: 0 !important;
-            padding-bottom: 0 !important;
         }
-        
-        /* Đảm bảo khung phiếu in không có viền xám của web */
-        .mau-phiieu {
+
+        /* Xóa khung xám bao quanh phiếu khi in */
+        .mau-in-thuc-te {
             border: none !important;
             padding: 0 !important;
         }
     }
-    
-    /* Giao diện hiển thị trên màn hình web */
-    .mau-phiieu {
+
+    /* Giao diện hiển thị đẹp trên màn hình máy tính */
+    .mau-in-thuc-te {
         background-color: white;
         color: black;
         padding: 40px;
-        border: 1px solid #ccc;
-        font-family: "Times New Roman", Times, serif;
+        border: 1px solid #ddd;
+        font-family: "Times New Roman", serif;
         line-height: 1.6;
     }
     </style>
@@ -41,7 +39,7 @@ st.markdown("""
 st.title("🖨️ Tạo Phiếu Thanh Toán Nhanh")
 
 # 3. Form nhập liệu
-with st.form("input_form"):
+with st.form("form_nhap"):
     col1, col2 = st.columns(2)
     with col1:
         ho_ten = st.text_input("Họ và tên người đề nghị")
@@ -51,19 +49,19 @@ with st.form("input_form"):
         so_tien = st.number_input("Số tiền (VNĐ)", min_value=0, step=1000)
     
     noi_dung = st.text_area("Nội dung thanh toán")
-    chốt_phieu = st.form_submit_button("Xuất Phiếu Để In")
+    chốt_phieu = st.form_submit_button("XUẤT PHIẾU")
 
-# 4. Hiển thị phiếu khi bấm nút
+# 4. Hiển thị phiếu
 if chốt_phieu:
-    # Dòng thông báo này sẽ tự ẩn đi khi nhấn Ctrl + P
-    st.success("Đã tạo mẫu thành công! Nhấn Ctrl + P để in phiếu.")
+    st.success("Đã tạo mẫu! Nhấn Ctrl + P để in (Các phần thừa sẽ tự động biến mất).")
     
-    html_layout = f"""
-    <div class="mau-phiieu">
+    # Định dạng HTML cho tờ phiếu
+    html_content = f"""
+    <div class="mau-in-thuc-te">
         <table style="width: 100%; border: none;">
             <tr>
                 <td style="text-align: center; width: 40%; vertical-align: top;">
-                    <span style="text-transform: uppercase; font-weight: bold;">ĐƠN VỊ CỦA BẠN</span><br>
+                    <b style="text-transform: uppercase;">ĐƠN VỊ CỦA BẠN</b><br>
                     ----------
                 </td>
                 <td style="text-align: center; vertical-align: top;">
@@ -104,5 +102,5 @@ if chốt_phieu:
     </div>
     """
     
-    # SỬA LỖI: Dùng unsafe_allow_html=True để hiển thị đúng định dạng thay vì hiện code
-    st.markdown(html_layout, unsafe_allow_html=True)
+    # HIỂN THỊ DƯỚI DẠNG VĂN BẢN ĐÃ ĐỊNH DẠNG (Quan trọng nhất)
+    st.markdown(html_content, unsafe_allow_html=True)
