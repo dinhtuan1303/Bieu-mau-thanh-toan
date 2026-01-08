@@ -94,7 +94,7 @@ def mau_giay_de_nghi_thanh_toan():
 <div class="info-line">Chức vụ: <span class="value">{chuc_vu}</span></div>
 <div class="info-line">Số tài khoản: <span class="value">{stk}</span> tại ngân hàng: <span class="value">{ngan_hang}</span></div>
 <div class="info-line">Nội dung thanh toán: <span class="value">{noi_dung}</span></div>
-<div class="info-line">Đề nghị thanh toán số tiền: <span class="value">{so_tien:,.0f} VNĐ</span></div>
+<div class="info-line">Đề nghị thanh toán số tiền: <span class="value">{so_tien:..0f} VNĐ</span></div>
 <div class="info-line">Bằng chữ: <span class="value">{bang_chu}</span></div>
 <div class="info-line"><i>(Kèm theo <span class="value">{kem_theo}</span> chứng từ gốc)</i></div>
 
@@ -128,6 +128,7 @@ chon = st.sidebar.selectbox("Chọn mẫu:", ["Giấy đề nghị thanh toán"]
 
 if chon == "Giấy đề nghị thanh toán":
     mau_giay_de_nghi_thanh_toan()
+
 
 
 
