@@ -2,8 +2,12 @@ import streamlit as st
 import pandas as pd
 
 # ==========================================
-# 1. CẤU HÌNH HỆ THỐNG
+# 1. CẤU HÌNH THÔNG TIN MẶC ĐỊNH (Sửa tại đây)
 # ==========================================
+TEN_DON_VI_MAC_DINH = "TRƯỜNG ĐẠI HỌC QUY NHƠN"
+MA_DON_VI_MAC_DINH = "1055595"
+DIA_DANH_MAC_DINH = "Gia Lai"
+
 st.set_page_config(page_title="Hệ thống in Giấy đề nghị thanh toán", layout="wide")
 
 # CSS để định dạng bản in chuyên nghiệp
@@ -34,38 +38,41 @@ st.markdown("""
 # ==========================================
 
 def mau_giay_de_nghi_thanh_toan():
-    st.subheader("⚙️ Nhập thông tin Giấy đề nghị thanh toán")
+    st.subheader("⚙️ Nhập thông tin thanh toán")
     
+    # Chỉ giữ lại các trường cần nhập thay đổi theo từng người
     with st.form("form_qnu"):
         c1, c2 = st.columns(2)
         with c1:
-            ten_dv = st.text_input("Tên đơn vị", "TRƯỜNG ĐẠI HỌC QUY NHƠN")
-            ma_dv = st.text_input("Mã ĐVCQHVNS", "1055595")
             ho_ten = st.text_input("Họ tên người đề nghị")
-            dv_cong_tac = st.text_input("Đơn vị công tác")
+            dv_cong_tac = st.text_input("Đơn vị công tác (Khoa/Phòng)")
         with c2:
-            dia_danh = st.text_input("Địa danh", "Gia Lai")
             chuc_vu = st.text_input("Chức vụ")
             stk = st.text_input("Số tài khoản")
             ngan_hang = st.text_input("Tại ngân hàng")
             
         noi_dung = st.text_area("Nội dung thanh toán")
-        so_tien = st.number_input("Số tiền đề nghị (VNĐ)", min_value=0, step=1000)
-        bang_chu = st.text_input("Bằng chữ")
-        kem_theo = st.text_input("Số chứng từ gốc kèm theo", "0")
+        
+        c3, c4 = st.columns(2)
+        with c3:
+            so_tien = st.number_input("Số tiền (VNĐ)", min_value=0, step=1000)
+        with c4:
+            kem_theo = st.text_input("Số chứng từ gốc kèm theo", "0")
+            
+        bang_chu = st.text_input("Bằng chữ (Số tiền)")
         
         submitted = st.form_submit_button("⚡ TẠO MẪU IN")
 
     if submitted:
         st.success("Đã tạo mẫu thành công! Nhấn Ctrl + P để in.")
         
-        # CHÚ Ý: Chuỗi html_output phải được đóng bằng """ ở cuối cùng
+        # HTML sử dụng biến mặc định ở phần 1
         html_output = f"""<div class="vung-in-chuan">
 <table class="header-table">
     <tr>
         <td style="width: 45%; text-align: left;">
-            <b>{ten_dv.upper()}</b><br>
-            Mã ĐVCQHVNS: {ma_dv}
+            <b>{TEN_DON_VI_MAC_DIN_VI_MAC_DINH.upper()}</b><br>
+            Mã ĐVCQHVNS: {MA_DON_VI_MAC_DINH}
         </td>
         <td style="width: 55%;">
             <b>CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM</b><br>
@@ -76,7 +83,7 @@ def mau_giay_de_nghi_thanh_toan():
     <tr>
         <td></td>
         <td style="text-align: right; padding-right: 20px; font-style: italic;">
-            {dia_danh}, ngày {pd.Timestamp.now().day} tháng {pd.Timestamp.now().month} năm {pd.Timestamp.now().year}
+            {DIA_DANH_MAC_DINH}, ngày {pd.Timestamp.now().day} tháng {pd.Timestamp.now().month} năm {pd.Timestamp.now().year}
         </td>
     </tr>
 </table>
