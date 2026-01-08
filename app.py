@@ -97,4 +97,5 @@ def mau_giay_de_nghi_thanh_toan():
 <table class="header-table" style="margin-top: 20px;">
     <tr>
         <td><b>Người đề nghị</b><br><i>(Ký, họ tên)</i><br><br><br><br><b>{ho_ten}</b></td>
-        <td><b>Trưởng đơn vị</b><br><i>(K
+        <td><b>Trưởng đơn vị</b><br><i>(Ký, họ tên)</i><br><br><br><br><b>{ho_ten}</b></td>
+
