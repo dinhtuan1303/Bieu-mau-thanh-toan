@@ -66,7 +66,7 @@ def mau_giay_de_nghi_thanh_toan():
         html_output = f"""<div class="vung-in-chuan">
 <table class="header-table">
     <tr>
-        <td style="width: 45%; text-align: left;">
+        <td style="width: 45%;">
             <b>TRƯỜNG ĐẠI HỌC QUY NHƠN</b><br>
             <b>Mã ĐVCQHVNS: 1055595</b><br>
             <span style="text-decoration: overline;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
@@ -80,7 +80,7 @@ def mau_giay_de_nghi_thanh_toan():
     <tr>
         <td></td>
         <td style="text-align: right; padding-right: 20px; font-style: italic;">
-            <b>Gia Lai</b>, ngày {pd.Timestamp.now().day} tháng {pd.Timestamp.now().month} năm {pd.Timestamp.now().year}
+            <b>Gia Lai<b>, ngày {pd.Timestamp.now().day} tháng {pd.Timestamp.now().month} năm {pd.Timestamp.now().year}
         </td>
     </tr>
 </table>
@@ -128,5 +128,6 @@ chon = st.sidebar.selectbox("Chọn mẫu:", ["Giấy đề nghị thanh toán"]
 
 if chon == "Giấy đề nghị thanh toán":
     mau_giay_de_nghi_thanh_toan()
+
 
 
